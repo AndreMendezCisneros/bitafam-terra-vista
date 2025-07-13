@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-// @ts-ignore
-import anime from 'animejs';
 import { Phone, Mail, MapPin, MessageSquare, Send, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,30 +20,11 @@ const Contact = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            anime({
-              targets: '.contact-title',
-              opacity: [0, 1],
-              translateY: [30, 0],
-              duration: 800,
-              easing: 'easeOutQuart'
-            });
-
-            anime({
-              targets: '.contact-form',
-              opacity: [0, 1],
-              translateX: [-50, 0],
-              duration: 1000,
-              delay: 300,
-              easing: 'easeOutQuart'
-            });
-
-            anime({
-              targets: '.contact-info',
-              opacity: [0, 1],
-              translateX: [50, 0],
-              duration: 1000,
-              delay: 500,
-              easing: 'easeOutQuart'
+            const elements = entry.target.querySelectorAll('.animate-on-scroll');
+            elements.forEach((element, index) => {
+              setTimeout(() => {
+                element.classList.add('fade-in-up');
+              }, index * 200);
             });
           }
         });
@@ -97,17 +76,17 @@ const Contact = () => {
     <section id="contact" ref={sectionRef} className="section-padding bg-secondary/30">
       <div className="container-width">
         <div className="text-center mb-16">
-          <h2 className="contact-title text-4xl md:text-5xl font-bold text-foreground mb-4 opacity-0">
+          <h2 className="fade-in-up text-4xl md:text-5xl font-bold text-foreground mb-4">
             <span className="text-gradient">Contáctanos</span>
           </h2>
-          <p className="contact-title text-lg text-muted-foreground max-w-2xl mx-auto opacity-0">
+          <p className="fade-in-up text-lg text-muted-foreground max-w-2xl mx-auto" style={{ animationDelay: '0.2s' }}>
             Estamos aquí para ayudarte a hacer realidad tu proyecto de construcción
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Formulario de Contacto */}
-          <div className="contact-form opacity-0">
+          <div className="animate-on-scroll">
             <div className="bg-card rounded-2xl p-8 shadow-[var(--shadow-card)]">
               <h3 className="text-2xl font-bold text-foreground mb-6">Envíanos un mensaje</h3>
               
@@ -181,7 +160,7 @@ const Contact = () => {
           </div>
 
           {/* Información de Contacto */}
-          <div className="contact-info opacity-0 space-y-8">
+          <div className="animate-on-scroll space-y-8">
             <div className="bg-card rounded-2xl p-8 shadow-[var(--shadow-card)]">
               <h3 className="text-2xl font-bold text-foreground mb-6">Información de contacto</h3>
               

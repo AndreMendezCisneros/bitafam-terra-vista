@@ -1,6 +1,4 @@
 import { useEffect, useRef } from 'react';
-// @ts-ignore
-import anime from 'animejs';
 import { Home, Map, FileText, Ruler, Shield, Building2 } from 'lucide-react';
 
 const Services = () => {
@@ -44,22 +42,11 @@ const Services = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            anime({
-              targets: '.services-title',
-              opacity: [0, 1],
-              translateY: [30, 0],
-              duration: 800,
-              easing: 'easeOutQuart'
-            });
-
-            anime({
-              targets: '.service-card',
-              opacity: [0, 1],
-              translateY: [50, 0],
-              scale: [0.9, 1],
-              duration: 800,
-              delay: anime.stagger(150, { start: 300 }),
-              easing: 'easeOutQuart'
+            const cards = entry.target.querySelectorAll('.service-card');
+            cards.forEach((card, index) => {
+              setTimeout(() => {
+                card.classList.add('fade-in-up');
+              }, index * 150);
             });
           }
         });
@@ -78,17 +65,17 @@ const Services = () => {
     <section id="services" ref={sectionRef} className="section-padding">
       <div className="container-width">
         <div className="text-center mb-12">
-          <h2 className="services-title text-4xl md:text-5xl font-bold text-foreground mb-4 opacity-0">
+          <h2 className="fade-in-up text-4xl md:text-5xl font-bold text-foreground mb-4">
             Nuestros <span className="text-gradient">Servicios</span>
           </h2>
-          <p className="services-title text-lg text-muted-foreground max-w-2xl mx-auto opacity-0">
+          <p className="fade-in-up text-lg text-muted-foreground max-w-2xl mx-auto" style={{ animationDelay: '0.2s' }}>
             Brindamos soluciones integrales en construcción y bienes raíces con más de 15 años de experiencia
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <div key={index} className="service-card opacity-0 group">
+            <div key={index} className="service-card group" style={{ animationDelay: `${index * 0.15}s` }}>
               <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-xl mb-6 group-hover:bg-primary/20 transition-colors duration-300">
                 <service.icon className="w-8 h-8 text-primary" />
               </div>

@@ -1,6 +1,4 @@
 import { useEffect, useRef } from 'react';
-// @ts-ignore
-import anime from 'animejs';
 import { CheckCircle, Target, Eye, Heart } from 'lucide-react';
 import teamWork from '@/assets/team-work.jpg';
 
@@ -35,40 +33,11 @@ const About = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            anime({
-              targets: '.about-title',
-              opacity: [0, 1],
-              translateY: [30, 0],
-              duration: 800,
-              easing: 'easeOutQuart'
-            });
-
-            anime({
-              targets: '.about-content',
-              opacity: [0, 1],
-              translateX: [-50, 0],
-              duration: 1000,
-              delay: 300,
-              easing: 'easeOutQuart'
-            });
-
-            anime({
-              targets: '.about-image',
-              opacity: [0, 1],
-              translateX: [50, 0],
-              scale: [0.9, 1],
-              duration: 1000,
-              delay: 500,
-              easing: 'easeOutQuart'
-            });
-
-            anime({
-              targets: '.value-card',
-              opacity: [0, 1],
-              translateY: [30, 0],
-              duration: 600,
-              delay: anime.stagger(150, { start: 700 }),
-              easing: 'easeOutQuart'
+            const elements = entry.target.querySelectorAll('.animate-on-scroll');
+            elements.forEach((element, index) => {
+              setTimeout(() => {
+                element.classList.add('fade-in-up');
+              }, index * 200);
             });
           }
         });
@@ -87,17 +56,17 @@ const About = () => {
     <section id="about" ref={sectionRef} className="section-padding bg-secondary/30">
       <div className="container-width">
         <div className="text-center mb-16">
-          <h2 className="about-title text-4xl md:text-5xl font-bold text-foreground mb-4 opacity-0">
+          <h2 className="fade-in-up text-4xl md:text-5xl font-bold text-foreground mb-4">
             Conoce <span className="text-gradient">BITAFAM</span>
           </h2>
-          <p className="about-title text-lg text-muted-foreground max-w-2xl mx-auto opacity-0">
+          <p className="fade-in-up text-lg text-muted-foreground max-w-2xl mx-auto" style={{ animationDelay: '0.2s' }}>
             Más de 15 años construyendo confianza y transformando sueños en realidad
           </p>
         </div>
 
         {/* Historia y Misión */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
-          <div className="about-content opacity-0">
+          <div className="animate-on-scroll">
             <h3 className="text-3xl font-bold text-foreground mb-6">Nuestra Historia</h3>
             <p className="text-muted-foreground text-lg leading-relaxed mb-6">
               Desde 2008, BITAFAM ha sido pionera en el desarrollo inmobiliario de la región. 
@@ -133,7 +102,7 @@ const About = () => {
             </div>
           </div>
 
-          <div className="about-image opacity-0">
+          <div className="animate-on-scroll">
             <img 
               src={teamWork}
               alt="Equipo BITAFAM"
@@ -152,7 +121,7 @@ const About = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {values.map((value, index) => (
-            <div key={index} className="value-card text-center opacity-0">
+            <div key={index} className="animate-on-scroll text-center" style={{ animationDelay: `${index * 0.1}s` }}>
               <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-xl mx-auto mb-4">
                 <value.icon className="w-8 h-8 text-primary" />
               </div>

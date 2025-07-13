@@ -1,6 +1,4 @@
 import { useEffect, useRef } from 'react';
-// @ts-ignore
-import anime from 'animejs';
 import { Calendar, MapPin, Users } from 'lucide-react';
 import property1 from '@/assets/property-1.jpg';
 import property2 from '@/assets/property-2.jpg';
@@ -70,22 +68,11 @@ const Projects = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            anime({
-              targets: '.projects-title',
-              opacity: [0, 1],
-              translateY: [30, 0],
-              duration: 800,
-              easing: 'easeOutQuart'
-            });
-
-            anime({
-              targets: '.project-card',
-              opacity: [0, 1],
-              translateY: [50, 0],
-              scale: [0.9, 1],
-              duration: 800,
-              delay: anime.stagger(150, { start: 300 }),
-              easing: 'easeOutQuart'
+            const cards = entry.target.querySelectorAll('.project-card');
+            cards.forEach((card, index) => {
+              setTimeout(() => {
+                card.classList.add('fade-in-scale');
+              }, index * 150);
             });
           }
         });
@@ -104,17 +91,17 @@ const Projects = () => {
     <section id="projects" ref={sectionRef} className="section-padding">
       <div className="container-width">
         <div className="text-center mb-16">
-          <h2 className="projects-title text-4xl md:text-5xl font-bold text-foreground mb-4 opacity-0">
+          <h2 className="fade-in-up text-4xl md:text-5xl font-bold text-foreground mb-4">
             Proyectos <span className="text-gradient">Realizados</span>
           </h2>
-          <p className="projects-title text-lg text-muted-foreground max-w-2xl mx-auto opacity-0">
+          <p className="fade-in-up text-lg text-muted-foreground max-w-2xl mx-auto" style={{ animationDelay: '0.2s' }}>
             Más de 500 familias han confiado en nosotros para construir sus hogares de ensueño
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <div key={project.id} className="project-card opacity-0 group bg-card rounded-2xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300 hover:-translate-y-2">
+          {projects.map((project, index) => (
+            <div key={project.id} className="project-card group bg-card rounded-2xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300 hover:-translate-y-2" style={{ animationDelay: `${index * 0.15}s` }}>
               <div className="relative overflow-hidden">
                 <img 
                   src={project.image}
@@ -156,15 +143,15 @@ const Projects = () => {
         {/* Estadísticas */}
         <div className="mt-20 bg-primary/5 rounded-2xl p-8 md:p-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
+            <div className="fade-in-up" style={{ animationDelay: '0.1s' }}>
               <div className="text-4xl md:text-5xl font-bold text-primary mb-2">500+</div>
               <div className="text-muted-foreground font-medium">Familias Satisfechas</div>
             </div>
-            <div>
+            <div className="fade-in-up" style={{ animationDelay: '0.2s' }}>
               <div className="text-4xl md:text-5xl font-bold text-primary mb-2">15+</div>
               <div className="text-muted-foreground font-medium">Años de Experiencia</div>
             </div>
-            <div>
+            <div className="fade-in-up" style={{ animationDelay: '0.3s' }}>
               <div className="text-4xl md:text-5xl font-bold text-primary mb-2">50+</div>
               <div className="text-muted-foreground font-medium">Proyectos Completados</div>
             </div>

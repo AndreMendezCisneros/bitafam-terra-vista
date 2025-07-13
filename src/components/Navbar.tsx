@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-// @ts-ignore
-import anime from 'animejs';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,26 +12,6 @@ const Navbar = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    anime({
-      targets: '.nav-logo',
-      opacity: [0, 1],
-      translateY: [-20, 0],
-      duration: 800,
-      delay: 200,
-      easing: 'easeOutQuart'
-    });
-
-    anime({
-      targets: '.nav-item',
-      opacity: [0, 1],
-      translateY: [-20, 0],
-      duration: 600,
-      delay: anime.stagger(100, { start: 400 }),
-      easing: 'easeOutQuart'
-    });
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -51,7 +29,7 @@ const Navbar = () => {
       <div className="container-width">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <div className="nav-logo opacity-0">
+          <div className="fade-in-up" style={{ animationDelay: '0.2s' }}>
             <h1 className="text-2xl font-bold text-gradient">BITAFAM</h1>
           </div>
 
@@ -68,7 +46,8 @@ const Navbar = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="nav-item nav-link opacity-0"
+                className="fade-in-up nav-link"
+                style={{ animationDelay: `${0.4 + index * 0.1}s` }}
               >
                 {item.name}
               </button>

@@ -1,6 +1,4 @@
 import { useEffect, useRef } from 'react';
-// @ts-ignore
-import anime from 'animejs';
 import { MapPin, Square, Eye } from 'lucide-react';
 import property1 from '@/assets/property-1.jpg';
 import property2 from '@/assets/property-2.jpg';
@@ -52,22 +50,11 @@ const Properties = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            anime({
-              targets: '.property-title',
-              opacity: [0, 1],
-              translateY: [30, 0],
-              duration: 800,
-              easing: 'easeOutQuart'
-            });
-
-            anime({
-              targets: '.property-card',
-              opacity: [0, 1],
-              translateY: [50, 0],
-              scale: [0.9, 1],
-              duration: 800,
-              delay: anime.stagger(200, { start: 200 }),
-              easing: 'easeOutQuart'
+            const cards = entry.target.querySelectorAll('.property-card');
+            cards.forEach((card, index) => {
+              setTimeout(() => {
+                card.classList.add('fade-in-scale');
+              }, index * 150);
             });
           }
         });
@@ -86,17 +73,17 @@ const Properties = () => {
     <section id="properties" ref={sectionRef} className="section-padding bg-secondary/30">
       <div className="container-width">
         <div className="text-center mb-12">
-          <h2 className="property-title text-4xl md:text-5xl font-bold text-foreground mb-4 opacity-0">
+          <h2 className="fade-in-up text-4xl md:text-5xl font-bold text-foreground mb-4">
             Propiedades en <span className="text-gradient">Venta</span>
           </h2>
-          <p className="property-title text-lg text-muted-foreground max-w-2xl mx-auto opacity-0">
+          <p className="fade-in-up text-lg text-muted-foreground max-w-2xl mx-auto" style={{ animationDelay: '0.2s' }}>
             Descubre nuestras mejores propiedades disponibles con la calidad y confianza que nos caracteriza
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {properties.map((property) => (
-            <div key={property.id} className="property-card opacity-0 group">
+          {properties.map((property, index) => (
+            <div key={property.id} className="property-card group" style={{ animationDelay: `${index * 0.15}s` }}>
               <div className="relative overflow-hidden">
                 <img 
                   src={property.image}
