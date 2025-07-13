@@ -2,41 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* BITAFAM Design System - Professional construction company */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
+    /* Brand Colors - Orange & White theme */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 220 15% 25%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 15% 25%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 15% 25%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary Orange */
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 25 95% 48%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary for contrast */
+    --secondary: 220 15% 96%;
+    --secondary-foreground: 220 15% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 25 95% 53%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 25 95% 53%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* BITAFAM Custom Design Tokens */
+    --brand-orange: 25 95% 53%;
+    --brand-orange-light: 25 95% 60%;
+    --brand-orange-dark: 25 95% 45%;
+    --brand-white: 0 0% 100%;
+    --brand-gray: 220 15% 25%;
+    --brand-gray-light: 220 9% 46%;
+
+    /* Gradients */
+    --gradient-orange: linear-gradient(135deg, hsl(var(--brand-orange)), hsl(var(--brand-orange-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--brand-orange) / 0.9), hsl(var(--brand-orange-dark) / 0.95));
+
+    /* Shadows */
+    --shadow-card: 0 4px 6px -1px hsl(var(--brand-orange) / 0.1), 0 2px 4px -1px hsl(var(--brand-orange) / 0.06);
+    --shadow-hover: 0 10px 25px -3px hsl(var(--brand-orange) / 0.15), 0 4px 6px -2px hsl(var(--brand-orange) / 0.05);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +123,42 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* BITAFAM Component Styles */
+  .btn-hero {
+    @apply bg-primary hover:bg-[hsl(var(--primary-hover))] text-primary-foreground px-8 py-4 rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-[var(--shadow-hover)] hover:-translate-y-2;
+  }
+
+  .section-padding {
+    @apply py-16 px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-width {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-[hsl(var(--brand-orange))] to-[hsl(var(--brand-orange-light))] bg-clip-text text-transparent;
+  }
+
+  .nav-link {
+    @apply text-foreground hover:text-primary transition-colors duration-200 font-medium;
+  }
+
+  .service-card {
+    @apply bg-card rounded-xl p-6 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300 hover:-translate-y-1;
+  }
+
+  .property-card {
+    @apply bg-card rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300 hover:-translate-y-2;
   }
 }
