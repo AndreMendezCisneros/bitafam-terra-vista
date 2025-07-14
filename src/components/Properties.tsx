@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapPin, Square, Eye, X, Bed, Bath, Car, Calendar } from 'lucide-react';
+import { MapPin, Square, Eye, X, Bed, Bath, Car, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import property1 from '@/assets/property-1.jpg';
 import property2 from '@/assets/property-2.jpg';
 
 const Properties = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [selectedProperty, setSelectedProperty] = useState<any>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [selectedProperty, setSelectedProperty] = useState<typeof properties[0] | null>(null);
 
   const properties = [
     {
@@ -71,6 +73,71 @@ const Properties = () => {
       interior: property1,
       mapUrl: "https://maps.google.com/maps?q=El+Bosque&t=&z=13&ie=UTF8&iwloc=&output=embed",
       features: ["Piscina", "Jardín amplio", "Terraza", "Área de BBQ"]
+    },
+    // Nuevas propiedades agregadas
+    {
+      id: 5,
+      image: property1,
+      title: "Departamento Central",
+      location: "Avenida Principal, Ciudad",
+      area: "95 m²",
+      price: "$70,000",
+      description: "Departamento céntrico con acceso a todo",
+      bedrooms: 2,
+      bathrooms: 2,
+      parking: 1,
+      year: 2023,
+      interior: property2,
+      mapUrl: "https://maps.google.com/maps?q=Avenida+Principal&t=&z=13&ie=UTF8&iwloc=&output=embed",
+      features: ["Cocina equipada", "Vista panorámica", "Seguridad", "Parque cercano"]
+    },
+    {
+      id: 6,
+      image: property2,
+      title: "Casa de Campo",
+      location: "Zona Rural, Afueras",
+      area: "180 m²",
+      price: "$95,000",
+      description: "Casa de campo ideal para descanso y naturaleza",
+      bedrooms: 3,
+      bathrooms: 2,
+      parking: 2,
+      year: 2021,
+      interior: property1,
+      mapUrl: "https://maps.google.com/maps?q=Zona+Rural&t=&z=13&ie=UTF8&iwloc=&output=embed",
+      features: ["Árboles frutales", "Pozo de agua", "Amplio terreno", "Chimenea"]
+    },
+    {
+      id: 7,
+      image: property1,
+      title: "Penthouse Deluxe",
+      location: "Zona Exclusiva, Ciudad",
+      area: "160 m²",
+      price: "$150,000",
+      description: "Penthouse de lujo con terraza privada",
+      bedrooms: 3,
+      bathrooms: 3,
+      parking: 2,
+      year: 2024,
+      interior: property2,
+      mapUrl: "https://maps.google.com/maps?q=Zona+Exclusiva&t=&z=13&ie=UTF8&iwloc=&output=embed",
+      features: ["Terraza privada", "Jacuzzi", "Vista ciudad", "Acabados premium"]
+    },
+    {
+      id: 8,
+      image: property2,
+      title: "Terreno Comercial",
+      location: "Zona Comercial, Ciudad",
+      area: "300 m²",
+      price: "$200,000",
+      description: "Terreno ideal para negocio o inversión",
+      bedrooms: 0,
+      bathrooms: 0,
+      parking: 0,
+      year: 2024,
+      interior: property1,
+      mapUrl: "https://maps.google.com/maps?q=Zona+Comercial&t=&z=13&ie=UTF8&iwloc=&output=embed",
+      features: ["Ubicación estratégica", "Documentos en regla", "Alto tránsito", "Listo para construir"]
     }
   ];
 
@@ -98,6 +165,18 @@ const Properties = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Función para desplazar el carrusel uno por uno
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current && cardRef.current) {
+      const { scrollLeft } = scrollRef.current;
+      const cardWidth = cardRef.current.offsetWidth + 24; // 24px = gap-6
+      scrollRef.current.scrollTo({
+        left: direction === 'left' ? scrollLeft - cardWidth : scrollLeft + cardWidth,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <section id="properties" ref={sectionRef} className="section-padding bg-secondary/30">
       <div className="container-width">
@@ -110,53 +189,82 @@ const Properties = () => {
           </p>
         </div>
 
-        {/* Scroll horizontal container */}
-        <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
-            {properties.map((property, index) => (
-              <div 
-                key={property.id} 
-                className="property-card group flex-shrink-0 w-80 bg-card border border-border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300" 
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                <div className="relative overflow-hidden">
-                  <img 
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        {/* Carrusel con flechas */}
+        <div className="relative flex items-center">
+          {/* Flecha izquierda */}
+          <button
+            className="z-10 p-2 rounded-full bg-white shadow-md border border-border hover:bg-primary/10 transition-colors disabled:opacity-30"
+            style={{ left: '-3rem' }}
+            onClick={() => scroll('left')}
+            aria-label="Anterior"
+            disabled={false}
+          >
+            <ChevronLeft size={28} />
+          </button>
+
+          {/* Contenedor de tarjetas */}
+          <div
+            ref={scrollRef}
+            className="overflow-x-hidden flex-1"
+          >
+            <div className="flex gap-6 pb-4 min-w-[700px] md:min-w-0" style={{ width: 'max-content' }}>
+              {properties.map((property, index) => (
+                <div
+                  key={property.id}
+                  ref={index === 0 ? cardRef : undefined}
+                  className="property-card group flex-shrink-0 w-80 bg-card border border-border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300"
+                  style={{ animationDelay: `${index * 0.15}s` }}
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={property.image}
+                      alt={property.title}
+                      className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-foreground mb-2">{property.title}</h3>
+
+                    <div className="flex items-center text-muted-foreground mb-2">
+                      <MapPin size={16} className="mr-2" />
+                      <span className="text-sm">{property.location}</span>
+                    </div>
+
+                    <div className="flex items-center text-muted-foreground mb-3">
+                      <Square size={16} className="mr-2" />
+                      <span className="text-sm">{property.area}</span>
+                    </div>
+
+                    <p className="text-muted-foreground text-sm mb-4">{property.description}</p>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold text-primary">{property.price}</span>
+                      <button
+                        onClick={() => setSelectedProperty(property)}
+                        className="flex items-center text-primary hover:text-primary-hover transition-colors font-medium"
+                      >
+                        <Eye size={16} className="mr-2" />
+                        Ver más
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-2">{property.title}</h3>
-                  
-                  <div className="flex items-center text-muted-foreground mb-2">
-                    <MapPin size={16} className="mr-2" />
-                    <span className="text-sm">{property.location}</span>
-                  </div>
-                  
-                  <div className="flex items-center text-muted-foreground mb-3">
-                    <Square size={16} className="mr-2" />
-                    <span className="text-sm">{property.area}</span>
-                  </div>
-                  
-                  <p className="text-muted-foreground text-sm mb-4">{property.description}</p>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-primary">{property.price}</span>
-                    <button 
-                      onClick={() => setSelectedProperty(property)}
-                      className="flex items-center text-primary hover:text-primary-hover transition-colors font-medium"
-                    >
-                      <Eye size={16} className="mr-2" />
-                      Ver más
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+          {/* Flecha derecha */}
+          <button
+            className="z-10 p-2 rounded-full bg-white shadow-md border border-border hover:bg-primary/10 transition-colors disabled:opacity-30"
+            style={{ right: '-3rem' }}
+            onClick={() => scroll('right')}
+            aria-label="Siguiente"
+            disabled={false}
+          >
+            <ChevronRight size={28} />
+          </button>
         </div>
 
         {/* Modal de detalles */}
@@ -165,30 +273,30 @@ const Properties = () => {
             <div className="bg-card rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-card p-4 border-b border-border flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-foreground">{selectedProperty.title}</h2>
-                <button 
+                <button
                   onClick={() => setSelectedProperty(null)}
                   className="p-2 hover:bg-muted rounded-full transition-colors"
                 >
                   <X size={24} />
                 </button>
               </div>
-              
+
               <div className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                   {/* Imagen principal */}
                   <div className="space-y-4">
-                    <img 
-                      src={selectedProperty.image} 
+                    <img
+                      src={selectedProperty.image}
                       alt={selectedProperty.title}
                       className="w-full h-64 object-cover rounded-lg"
                     />
-                    <img 
-                      src={selectedProperty.interior} 
+                    <img
+                      src={selectedProperty.interior}
                       alt="Interior"
                       className="w-full h-64 object-cover rounded-lg"
                     />
                   </div>
-                  
+
                   {/* Detalles */}
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
@@ -221,7 +329,7 @@ const Properties = () => {
                         <span className="text-2xl font-bold">{selectedProperty.year}</span>
                       </div>
                     </div>
-                    
+
                     <div className="bg-muted p-4 rounded-lg">
                       <h3 className="font-semibold mb-2">Características</h3>
                       <ul className="grid grid-cols-2 gap-2">
@@ -230,13 +338,13 @@ const Properties = () => {
                         ))}
                       </ul>
                     </div>
-                    
+
                     <div className="text-center">
                       <span className="text-4xl font-bold text-primary">{selectedProperty.price}</span>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Mapa */}
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold mb-4">Ubicación</h3>
@@ -252,7 +360,7 @@ const Properties = () => {
                     ></iframe>
                   </div>
                 </div>
-                
+
                 {/* Información adicional */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
