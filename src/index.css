@@ -289,3 +289,13 @@
   animation: fadeInScale 2s ease-out forwards;
   opacity: 0;
 }
+
+/* Hide scrollbar for horizontal scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
